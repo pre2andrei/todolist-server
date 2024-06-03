@@ -40,7 +40,7 @@ itemsRouter.post("/addItem", async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Category not found" });
 
     const item = await prisma.item.create({
-      data: { order, name, measurement, quantity, category_id: categoryId },
+      data: { order, name, measurement, quantity:+quantity, category_id: categoryId },
     });
 
     return res.status(200).json(item);
