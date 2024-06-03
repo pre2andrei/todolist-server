@@ -27,6 +27,8 @@ itemsRouter.post("/check", async (req: Request, res: Response) => {
   }
 });
 itemsRouter.post("/addItem", async (req: Request, res: Response) => {
+  console.log("addItem", req.body);
+
   if (!isValidItem(req.body))
     return res.status(400).json({ message: "Invalid Item Data" });
 
@@ -40,11 +42,19 @@ itemsRouter.post("/addItem", async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Category not found" });
 
     const item = await prisma.item.create({
-      data: { order, name, measurement, quantity:+quantity, category_id: categoryId },
+      data: {
+        order,
+        name,
+        measurement,
+        quantity: quantity ? +quantity : 0,
+        category_id: categoryId,
+      },
     });
 
     return res.status(200).json(item);
   } catch (error) {
+    console.log(error);
+
     return res.status(500).json({ message: "Error on the server" });
   }
 });
